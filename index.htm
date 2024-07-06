@@ -28,7 +28,7 @@
       <div class="crossnote markdown-preview  ">
       
 <h1 id="常见stl容器用法">常见STL容器用法 </h1>
-<h3 id="stackstack--queuequeue--priority_queuepriority_queue--dequedeque--setset--mapmap--bitsetbitset"><a href="#stack">stack</a> | <a href="#queue">queue</a> | <a href="#priority_queue">priority_queue</a> | <a href="#deque">deque</a> | <a href="#set">set</a> | <a href="#map">map</a> | <a href="#bitset">bitset</a> </h3>
+<h3 id="stackstack--queuequeue--priority_queuepriority_queue--dequedeque--setset--multisetmultiset---mapmap--bitsetbitset"><a href="#stack">stack</a> | <a href="#queue">queue</a> | <a href="#priority_queue">priority_queue</a> | <a href="#deque">deque</a> | <a href="#set">set</a> | <a href="#multiset">multiset</a>  | <a href="#map">map</a> | <a href="#bitset">bitset</a> </h3>
 <h6 id="c标准库文档a-hrefhttpszhcppreferencecomwe9a696e9a1b5-target_blankcppreferencea">C++标准库文档：<a href="https://zh.cppreference.com/w/%E9%A6%96%E9%A1%B5" target="_blank">cppreference</a> </h6>
 <hr>
 <h2 id="a-id--stackstack常见stl容器用法a"><a id="stack" href="file:///d:/code/markdown"></a><a href="#%E5%B8%B8%E8%A7%81stl%E5%AE%B9%E5%99%A8%E7%94%A8%E6%B3%95">stack</a> </h2>
@@ -227,7 +227,13 @@ find();    查找，返回指向该元素的迭代器。如果不存在，则返
 count();   查找，对于set来说总是返回0（如果元素不存在）或1<br>
 size();大小<br>
 empty();<br>
-swap();</p>
+swap();<br>
+<strong>set map multiset multimap 均有：</strong><br>
+lower_bound(const key_type&amp; key): 返回一个迭代器，指向第一个不小于key的元素。<br>
+upper_bound(const key_type&amp; key): 返回一个迭代器，指向第一个大于key的元素。<br>
+equal_range(const key_type&amp; key): 
+返回一个包含两个迭代器的pair，第一个迭代器指向第一个不小于key的元素，第二个迭代器指向第一个大于key的元素。如果容器中不存在等于key的
+元素，则两个迭代器相等且都等于upper_bound(key)。</p>
 <h4 id="示例-4">示例 </h4>
 <pre data-role="codeBlock" data-info="cpp" class="language-cpp cpp"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span>  </span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;set&gt;</span>  </span>
@@ -293,12 +299,35 @@ swap();</p>
     <span class="token punctuation">}</span>  
 <span class="token punctuation">}</span><span class="token punctuation">;</span>  
 std<span class="token double-colon punctuation">::</span>set<span class="token operator">&lt;</span><span class="token keyword keyword-int">int</span><span class="token punctuation">,</span> Compare<span class="token operator">&gt;</span> mySetCompare<span class="token punctuation">;</span>
-</code></pre><h2 id="a-id--mapmap常见stl容器用法a"><a id="map" href="file:///d:/code/markdown"></a><a href="#%E5%B8%B8%E8%A7%81stl%E5%AE%B9%E5%99%A8%E7%94%A8%E6%B3%95">map</a> </h2>
+</code></pre><h2 id="a-id-multisetmultiset常见stl容器用法a"><a id="multiset" href="file:///d:/code/markdown"></a><a href="#%E5%B8%B8%E8%A7%81stl%E5%AE%B9%E5%99%A8%E7%94%A8%E6%B3%95">multiset</a> </h2>
 <h4 id="特点-5">特点 </h4>
-<p>map是一个关联容器，它存储元素并形成键值对（key-value pairs）的集合，其中每个元素都是一个键值对。map内部通常通过红黑树实现，以支持对数时间复杂度的查找、插入和删除操作。map的键是唯一的，并且自动按键的排序规则（默认为升序）排序。</p>
+<p>红黑树实现，包含可以重复的键值。<code>multiset</code>中的元素总是按照特定的排序标准（默认为升序）进行排序。</p>
 <h4 id="函数-5">函数 </h4>
-<p>和set基本一样</p>
+<p>begin(): 返回一个指向容器中第一个元素的迭代器。<br>
+end(): 返回一个指向容器中最后一个元素之后位置的迭代器（即“尾后迭代器”）。<br>
+rbegin(): 返回一个指向容器中最后一个元素的反向迭代器。<br>
+rend(): 返回一个指向容器中第一个元素之前位置的反向迭代器（即“尾前反向迭代器”）。</p>
 <h4 id="示例-5">示例 </h4>
+<p>求解滑动窗口</p>
+<pre data-role="codeBlock" data-info="cpp" class="language-cpp cpp"><code><span class="token keyword keyword-class">class</span> <span class="token class-name">Solution</span> <span class="token punctuation">{</span>
+<span class="token keyword keyword-public">public</span><span class="token operator">:</span>
+    vector<span class="token operator">&lt;</span><span class="token keyword keyword-int">int</span><span class="token operator">&gt;</span> <span class="token function">maxSlidingWindow</span><span class="token punctuation">(</span>vector<span class="token operator">&lt;</span><span class="token keyword keyword-int">int</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span> nums<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        multiset<span class="token operator">&lt;</span><span class="token keyword keyword-int">int</span><span class="token operator">&gt;</span> st<span class="token punctuation">;</span>
+        vector<span class="token operator">&lt;</span><span class="token keyword keyword-int">int</span><span class="token operator">&gt;</span> ans<span class="token punctuation">;</span>
+        <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> nums<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>i <span class="token operator">&gt;=</span> k<span class="token punctuation">)</span> st<span class="token punctuation">.</span><span class="token function">erase</span><span class="token punctuation">(</span>st<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>nums<span class="token punctuation">[</span>i <span class="token operator">-</span> k<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            st<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>i <span class="token operator">&gt;=</span> k <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> ans<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token operator">*</span>st<span class="token punctuation">.</span><span class="token function">rbegin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-return">return</span> ans<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre><h2 id="a-id--mapmap常见stl容器用法a"><a id="map" href="file:///d:/code/markdown"></a><a href="#%E5%B8%B8%E8%A7%81stl%E5%AE%B9%E5%99%A8%E7%94%A8%E6%B3%95">map</a> </h2>
+<h4 id="特点-6">特点 </h4>
+<p>map是一个关联容器，它存储元素并形成键值对（key-value pairs）的集合，其中每个元素都是一个键值对。map内部通常通过红黑树实现，以支持对数时间复杂度的查找、插入和删除操作。map的键是唯一的，并且自动按键的排序规则（默认为升序）排序。</p>
+<h4 id="函数-6">函数 </h4>
+<p>和set基本一样</p>
+<h4 id="示例-6">示例 </h4>
 <pre data-role="codeBlock" data-info="cpp" class="language-cpp cpp"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span>  </span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;map&gt;</span>  </span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string&gt;</span>  </span>
@@ -363,11 +392,11 @@ std<span class="token double-colon punctuation">::</span>set<span class="token o
 <span class="token comment">// 注意：上面的代码示例中，删除键为2的元素的部分是为了演示如何使用迭代器进行删除，但实际上在删除后立即尝试再次使用那个迭代器（it）是不安全的。  </span>
 <span class="token comment">// 在实际应用中，你应该在删除后立即停止使用该迭代器，或者重新通过find等方法获取有效的迭代器。</span>
 </code></pre><h2 id="a-id--bitsetbitset常见stl容器用法a"><a id="bitset" href="file:///d:/code/markdown"></a><a href="#%E5%B8%B8%E8%A7%81stl%E5%AE%B9%E5%99%A8%E7%94%A8%E6%B3%95">bitset</a> </h2>
-<h4 id="特点-6">特点 </h4>
+<h4 id="特点-7">特点 </h4>
 <p>有很多位的二进制数，支持位运算O(n/w机器位数)，不支持加减乘除，从右往左从低到高</p>
-<h4 id="函数-6">函数 </h4>
+<h4 id="函数-7">函数 </h4>
 <p>count()返回bitset中1位的总数(size_t)</p>
-<h4 id="示例-6">示例 </h4>
+<h4 id="示例-7">示例 </h4>
 <pre data-role="codeBlock" data-info="cpp" class="language-cpp cpp"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;bitset&gt;</span>  </span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span>  </span>
   
